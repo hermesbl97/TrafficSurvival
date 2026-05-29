@@ -33,7 +33,6 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 // Cambia a la pantalla de juego
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
-                dispose();
             }
         });
 

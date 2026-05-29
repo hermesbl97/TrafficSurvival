@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,13 +19,20 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Player player;
     private Tree tree;
+    private Sound collisionSound;
+    private Music backgroundMusic;
 
     @Override
     public void show() {
-        player = new Player(new Texture(Gdx.files.internal("tile_0024.png")));
-        tree = new Tree(new Texture(Gdx.files.internal("tile_0238.png")));
+        player = new Player(new Texture(Gdx.files.internal("textures/tile_0024.png")));
+        tree = new Tree(new Texture(Gdx.files.internal("textures/tile_0238.png")));
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bump.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/background.mp3"));
 
         batch = new SpriteBatch();
+
+        backgroundMusic.play();
+        backgroundMusic.setVolume(0.3f);
     }
 
     @Override
@@ -42,7 +51,8 @@ public class GameScreen implements Screen {
             player.getPosition().y = oldY;
 
             player.getPosition().y -= 5;
-            player.getRectangle().setPosition(player.getPosition().x, player.getPosition().y);
+            player.getRectangle().setPosition(oldX, oldY);
+            collisionSound.play();
         }
 
         batch.begin();
@@ -53,7 +63,6 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             // Volver al menú principal
             ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
-            dispose();
         }
     }
 
