@@ -9,16 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import lombok.Data;
 
+import static com.svalero.trafficsurvive.util.Constants.PLAYER_SPEED;
+
 @Data
-public class Player implements Disposable {
-    private Rectangle rectangle;
-    private Texture texture;
-    private Vector2 position;
+public class Player extends Character implements Disposable {
 
     public Player(Texture texture) {
-        this.texture = texture;
-        position = new Vector2(100, 100);
-        rectangle = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
+        super(texture, new Vector2(100, 100));
     }
 
     public void draw(Batch batch) {
@@ -28,19 +25,19 @@ public class Player implements Disposable {
     public void handleInput(float delta) {
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            position.x -= 150*delta;
+            position.x -= PLAYER_SPEED * delta;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            position.x += 150*delta;
+            position.x += PLAYER_SPEED * delta;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            position.y += 150*delta;
+            position.y += PLAYER_SPEED * delta;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            position.y -= 150*delta;
+            position.y -= PLAYER_SPEED * delta;
         }
 
         // Actualizamos posición después del movimiento
