@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.svalero.trafficsurvive.domain.Player;
 import com.svalero.trafficsurvive.domain.Tree;
+import com.svalero.trafficsurvive.manager.ConfigurationManager;
 
 public class GameScreen implements Screen {
 
@@ -31,8 +32,12 @@ public class GameScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        backgroundMusic.play();
-        backgroundMusic.setVolume(0.3f);
+        if (ConfigurationManager.isMusicEnabled()) {
+            backgroundMusic.setLooping(true);
+            backgroundMusic.setVolume(0.3f);
+            backgroundMusic.play();
+        }
+
     }
 
     @Override
@@ -52,7 +57,10 @@ public class GameScreen implements Screen {
 
             player.getPosition().y -= 5;
             player.getRectangle().setPosition(oldX, oldY);
-            collisionSound.play();
+
+            if (ConfigurationManager.isSoundEnabled()) {
+                collisionSound.play();
+            }
         }
 
         batch.begin();
