@@ -1,4 +1,4 @@
-package com.svalero.trafficsurvive;
+package com.svalero.trafficsurvive.screen;
 
 import com.badlogic.gdx.Screen;
 
