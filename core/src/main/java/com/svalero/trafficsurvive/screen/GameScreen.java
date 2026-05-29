@@ -1,5 +1,6 @@
 package com.svalero.trafficsurvive.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -49,6 +50,11 @@ public class GameScreen implements Screen {
         tree.draw(batch);
         batch.end();
 
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            // Volver al menú principal
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
+            dispose();
+        }
     }
 
     @Override
