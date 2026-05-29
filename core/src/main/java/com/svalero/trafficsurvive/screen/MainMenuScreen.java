@@ -37,6 +37,15 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        VisTextButton configurationButton = new VisTextButton("Configuración");
+        configurationButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
+                dispose();
+            }
+        });
+
         VisTextButton exitButton = new VisTextButton("Salir");
         exitButton.addListener(new ClickListener() {
             @Override
@@ -47,6 +56,8 @@ public class MainMenuScreen implements Screen {
 
         table.row(); //ordenamos la tabla
         table.add(playButton).center().width(200).height(50).pad(10);
+        table.row();
+        table.add(configurationButton).center().width(200).height(50).pad(10);
         table.row();
         table.add(exitButton).center().width(200).height(50).pad(10);
 
