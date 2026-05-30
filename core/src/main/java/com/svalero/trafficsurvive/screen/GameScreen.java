@@ -14,64 +14,29 @@ import com.badlogic.gdx.math.Vector2;
 import com.svalero.trafficsurvive.domain.Player;
 import com.svalero.trafficsurvive.domain.Tree;
 import com.svalero.trafficsurvive.manager.ConfigurationManager;
+import com.svalero.trafficsurvive.manager.LogicManager;
+import com.svalero.trafficsurvive.manager.RenderManager;
 
 public class GameScreen implements Screen {
 
-    private SpriteBatch batch;
-    private Player player;
-    private Tree tree;
-    private Sound collisionSound;
-    private Music backgroundMusic;
+    private RenderManager renderManager;
+    private LogicManager logicManager;
+
+    public GameScreen() {
+        logicManager = new LogicManager();
+        renderManager = new RenderManager(logicManager);
+    }
 
     @Override
     public void show() {
-        player = new Player(new Texture(Gdx.files.internal("textures/tile_0024.png")));
-        tree = new Tree(new Texture(Gdx.files.internal("textures/tile_0238.png")));
-        collisionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bump.mp3"));
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/background.mp3"));
-
-        batch = new SpriteBatch();
-
-        if (ConfigurationManager.isMusicEnabled()) {
-            backgroundMusic.setLooping(true);
-            backgroundMusic.setVolume(0.3f);
-            backgroundMusic.play();
-        }
-
+        logicManager.load();
+        renderManager.load();
     }
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(0, 0, 0, 1); // Limpiamos la pantalla
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        float oldX = player.getPosition().x;
-        float oldY = player.getPosition().y;
-
-        player.handleInput(v);
-
-        //si chocan, lo devolvemos a la posición segura
-        if (player.getRectangle().overlaps(tree.getRectangle())) {
-            player.getPosition().x = oldX;
-            player.getPosition().y = oldY;
-
-            player.getPosition().y -= 5;
-            player.getRectangle().setPosition(oldX, oldY);
-
-            if (ConfigurationManager.isSoundEnabled()) {
-                collisionSound.play();
-            }
-        }
-
-        batch.begin();
-        player.draw(batch);
-        tree.draw(batch);
-        batch.end();
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            // Volver al menú principal
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
-        }
+        logicManager.update(v);
+        renderManager.drawFrame(v);
     }
 
     @Override
@@ -96,7 +61,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        player.dispose();
-        tree.dispose();
+        logicManager.dispose();
+        renderManager.dispose();
     }
 }
