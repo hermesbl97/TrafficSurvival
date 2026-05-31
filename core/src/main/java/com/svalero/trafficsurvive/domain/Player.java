@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
@@ -14,7 +15,7 @@ import static com.svalero.trafficsurvive.util.Constants.PLAYER_SPEED;
 @Data
 public class Player extends Character implements Disposable {
 
-    public Player(Texture texture) {
+    public Player(TextureRegion texture) {
         super(texture, new Vector2(100, 100));
     }
 
@@ -47,6 +48,5 @@ public class Player extends Character implements Disposable {
 
     @Override
     public void dispose() {
-        texture.dispose();
     }
 }

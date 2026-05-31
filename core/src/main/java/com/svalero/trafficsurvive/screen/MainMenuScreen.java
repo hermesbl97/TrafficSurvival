@@ -10,10 +10,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.svalero.trafficsurvive.manager.ResourceManager;
 
 /** First screen of the application. Displayed after the application is created. */
 public class MainMenuScreen implements Screen {
     private Stage stage;
+
+    public MainMenuScreen() {
+        ResourceManager.loadAllResources();
+
+        while(!ResourceManager.update()) {
+
+        }
+    }
 
     @Override
     public void show() {
