@@ -32,6 +32,7 @@ public class LogicManager implements Disposable {
         float oldY = player.getPosition().y;
 
         player.handleInput(v);
+        player.update(v);
 
 //        //si chocan, lo devolvemos a la posición segura
 //        if (player.getRectangle().overlaps(tree.getRectangle())) {
