@@ -2,6 +2,7 @@ package com.svalero.trafficsurvive.screen;
 
 
 import com.badlogic.gdx.Screen;
+import com.svalero.trafficsurvive.manager.LevelManager;
 import com.svalero.trafficsurvive.manager.LogicManager;
 import com.svalero.trafficsurvive.manager.RenderManager;
 
@@ -9,16 +10,18 @@ public class GameScreen implements Screen {
 
     private RenderManager renderManager;
     private LogicManager logicManager;
+    private LevelManager levelManager;
 
     public GameScreen() {
         logicManager = new LogicManager();
-        renderManager = new RenderManager(logicManager);
+        levelManager = new LevelManager(logicManager);
+        levelManager.loadCurrentLevel();
+        renderManager = new RenderManager(logicManager, levelManager.batch);
     }
 
     @Override
     public void show() {
         logicManager.load();
-        renderManager.load();
     }
 
     @Override
