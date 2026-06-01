@@ -4,13 +4,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.svalero.trafficsurvive.domain.BubbleEnemy;
 import com.svalero.trafficsurvive.domain.Player;
 import com.svalero.trafficsurvive.screen.ConfigurationScreen;
 
 public class LogicManager implements Disposable {
 
     protected Player player;
+    protected BubbleEnemy bubbleEnemy;
     private Music backgroundMusic;
 
     public LogicManager() {
@@ -19,6 +22,7 @@ public class LogicManager implements Disposable {
 
     public void load() {
         player = new Player(ResourceManager.getRegion("player3_idle_right"));
+        bubbleEnemy = new BubbleEnemy(ResourceManager.getRegion("bubble_pink_pos2"), new Vector2(800,200));
 
         if (ConfigurationManager.isMusicEnabled()) {
             backgroundMusic.setLooping(true);
@@ -33,6 +37,7 @@ public class LogicManager implements Disposable {
 
         player.handleInput(v);
         player.update(v);
+        bubbleEnemy.update(v);
 
 //        //si chocan, lo devolvemos a la posición segura
 //        if (player.getRectangle().overlaps(tree.getRectangle())) {
