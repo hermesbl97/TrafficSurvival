@@ -99,17 +99,17 @@ public class LevelManager {
                 float x = object.getProperties().get("x", Float.class);
                 float y = object.getProperties().get("y", Float.class);
 
-                String objectType = object.getProperties().get("name", String.class);
+                String itemName = object.getProperties().get("name", String.class);
 
-                if (objectType != null && objectType.equals("item_coin")) {
+                if (itemName != null && itemName.equals("item_coin")) {
                     CoinItem item = new CoinItem(ResourceManager.getRegion("gold_coin"), new Vector2(x, y));
                     logicManager.addItem(item);
 
-                } else if (objectType != null && objectType.equals("item_diamond")) {
+                } else if (itemName != null && itemName.equals("item_diamond")) {
                     DiamondItem item = new DiamondItem(ResourceManager.getRegion("diamante"), new Vector2(x, y));
                     logicManager.addItem(item);
 
-                } else if (objectType != null && objectType.equals("item_life")) {
+                } else if (itemName != null && itemName.equals("item_life")) {
                     LifeItem item = new LifeItem(ResourceManager.getRegion("heart"), new Vector2(x, y));
                     logicManager.addItem(item);
                 }

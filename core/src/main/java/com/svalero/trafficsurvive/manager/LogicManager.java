@@ -131,18 +131,18 @@ public class LogicManager implements Disposable {
                     if (enemy instanceof CarEnemy) {
                         if (ConfigurationManager.isSoundEnabled()) {
                             crashSound.play();
-                            player.removeLife();
+                        }
 
-                            System.out.println("Pierdes una vida");
+                        player.removeLife();
+                        System.out.println("Pierdes una vida");
 
-                            // Reaparecemos al inicio seguro (X=100, Y=0 según el constructor de tu Player)
-                            player.getPosition().set(100, 0);
-                            player.getRectangle().setPosition(100, 0);
+                        // Reaparecemos al inicio seguro (X=100, Y=0 según el constructor de tu Player)
+                        player.getPosition().set(100, 0);
+                        player.getRectangle().setPosition(100, 0);
 
-                            if (player.getLives() <= 0) {
-                                System.out.println(" Te has quedado sin vidas.");
-                                // TODO Mensaje derrota y sugerencia jugar nueva partida
-                            }
+                        if (player.getLives() <= 0) {
+                            System.out.println(" Te has quedado sin vidas.");
+                            // TODO Mensaje derrota y sugerencia jugar nueva partida
                         }
                     } else if (enemy instanceof BubbleEnemy) {
                         bubbleSound.play();
