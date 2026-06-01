@@ -10,27 +10,15 @@ import com.badlogic.gdx.utils.Disposable;
 import com.svalero.trafficsurvive.manager.ResourceManager;
 import lombok.Data;
 
-import static com.svalero.trafficsurvive.domain.Player.State.*;
+import static com.svalero.trafficsurvive.domain.Character.State.*;
 import static com.svalero.trafficsurvive.util.Constants.PLAYER_SPEED;
 
 @Data
 public class Player extends Character implements Disposable {
 
-    public enum State {
-        IDLE_LEFT, IDLE_FRONT, IDLE_BACK, IDLE_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_FRONT, MOVE_BACK
-    }
-
-    public State state;
-    private Animation<TextureRegion> movingRightAnimation;
-    private Animation<TextureRegion> movingLeftAnimation;
-    private Animation<TextureRegion> movingFrontAnimation;
-    private Animation<TextureRegion> movingBackAnimation;
-    private float stateTime;
-
     public Player(TextureRegion texture) {
-        super(texture, new Vector2(100, 100));
+        super(texture, new Vector2(100, 100), IDLE_FRONT);
 
-        state = IDLE_FRONT;
         stateTime = 0f;
 
         movingFrontAnimation = new Animation<>(0.15f,
@@ -40,11 +28,13 @@ public class Player extends Character implements Disposable {
 
         movingRightAnimation = new Animation<>(0.15f,
             ResourceManager.getRegion("player3_move_right"),
+            ResourceManager.getRegion("player3_idle_right"),
             ResourceManager.getRegion("player3_move_right2")
         );
 
         movingLeftAnimation = new Animation<>(0.15f,
             ResourceManager.getRegion("player3_move_left"),
+            ResourceManager.getRegion("player3_idle_left"),
             ResourceManager.getRegion("player3_move_left2")
         );
 

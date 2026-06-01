@@ -24,6 +24,7 @@ public class RenderManager implements Disposable {
 
         batch.begin();
         logicManager.player.draw(batch);
+        logicManager.bubbleEnemy.draw(batch);
         batch.end();
     }
 
