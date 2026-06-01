@@ -60,7 +60,7 @@ public class LogicManager implements Disposable {
         player.handleInput(v);
         player.update(v);
 
-        // 4. CALCULAR ESQUINAS DEL RECTÁNGULO ACTUALIZADO
+        // CALCULAR ESQUINAS DEL RECTÁNGULO ACTUALIZADO
         float playerLeft = player.getRectangle().x;
         float playerRight = player.getRectangle().x + player.getRectangle().width;
         float playerBottom = player.getRectangle().y;
@@ -79,7 +79,6 @@ public class LogicManager implements Disposable {
             player.getPosition().x = oldX;
             player.getPosition().y = oldY;
 
-            // 💥 CRUCIAL: También tenemos que devolver el rectángulo de colisión atrás
             player.getRectangle().setPosition(oldX, oldY);
 
             if (ConfigurationManager.isSoundEnabled()) {
