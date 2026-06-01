@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.svalero.trafficsurvive.domain.BubbleEnemy;
 import com.svalero.trafficsurvive.domain.Character;
+import com.svalero.trafficsurvive.domain.Item;
 
 public class RenderManager implements Disposable {
 
@@ -20,9 +21,15 @@ public class RenderManager implements Disposable {
 
     public void drawFrame(float v) {
         batch.begin();
+
+        for (Item item : logicManager.getItems()) {
+            item.draw(batch);
+        }
+
         logicManager.player.draw(batch);
+
         for (Character enemy : logicManager.enemies) {
-            enemy.draw(batch); // Esto dibujará burbujas y coches por igual
+            enemy.draw(batch);
         }
         batch.end();
     }

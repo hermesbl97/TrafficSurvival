@@ -29,6 +29,11 @@ public class ResourceManager {
 
     public static void loadSounds() {
         assetManager.load("sounds/bump.mp3", Sound.class);
+        assetManager.load("sounds/crash.mp3", Sound.class);
+        assetManager.load("sounds/getCoin.mp3", Sound.class);
+        assetManager.load("sounds/getDiamond.mp3", Sound.class);
+        assetManager.load("sounds/getLife.mp3", Sound.class);
+        assetManager.load("sounds/removeLife.mp3", Sound.class);
     }
 
     public static Music getMusic(String name) {
