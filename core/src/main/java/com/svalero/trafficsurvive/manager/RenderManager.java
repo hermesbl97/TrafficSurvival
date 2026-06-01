@@ -19,7 +19,7 @@ public class RenderManager implements Disposable {
 
     public void drawFrame(float v) {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Limpiamos la pantalla
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
         logicManager.player.draw(batch);
