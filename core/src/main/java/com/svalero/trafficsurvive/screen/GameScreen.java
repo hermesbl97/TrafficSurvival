@@ -19,7 +19,6 @@ public class GameScreen implements Screen {
         levelManager = new LevelManager(logicManager);
         levelManager.loadCurrentLevel();
         renderManager = new RenderManager(logicManager, levelManager.batch);
-
         cameraManager = new CameraManager(logicManager, levelManager);
     }
 
