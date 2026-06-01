@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="30" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="64">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="30" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="85">
  <tileset firstgid="1" name="background3" tilewidth="16" tileheight="16" tilecount="486" columns="27">
   <image source="tilemap_packed.png" width="432" height="288"/>
  </tileset>
@@ -22,126 +22,6 @@
   </data>
  </layer>
  <objectgroup id="3" name="enemies">
-  <object id="4" x="467" y="82.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="5" x="470" y="175">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="6" x="468.5" y="264.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="7" x="16.5" y="126.5">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="8" x="17" y="226.5">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="9" x="21" y="395.5">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="10" x="21.5" y="358">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="11" x="16.5" y="669">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="12" x="17" y="596.5">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="13" x="454" y="631.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="14" x="462.5" y="839">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="15" x="15" y="875.5">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="16" x="19.5" y="1211.5">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="17" x="465" y="1163.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="18" x="461" y="1260.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="19" x="461" y="1532.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="20" x="464" y="1628">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="21" x="20" y="1583">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="22" x="17.5" y="1852">
-   <properties>
-    <property name="direction" value="right"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
-  <object id="23" x="463" y="1813.5">
-   <properties>
-    <property name="direction" value="left"/>
-    <property name="name" value="car_spawner"/>
-   </properties>
-  </object>
   <object id="24" x="577" y="292.5">
    <ellipse/>
   </object>
@@ -198,6 +78,126 @@
   <object id="37" gid="717" x="322" y="323" width="21" height="21">
    <properties>
     <property name="name" value="bubble_pink"/>
+   </properties>
+  </object>
+  <object id="64" gid="454" x="445.333" y="1822" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="65" gid="482" x="17.3333" y="1856" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="66" gid="482" x="22.6667" y="1633.33" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="67" gid="482" x="22" y="1540" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="68" gid="482" x="24.6667" y="1264.67" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="69" gid="482" x="22" y="845.333" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="70" gid="482" x="19.3333" y="673.333" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="71" gid="482" x="10.6667" y="278" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="72" gid="482" x="8.66667" y="185.333" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="73" gid="482" x="64" y="95.3333" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="74" gid="454" x="463.333" y="136" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="75" gid="454" x="459.333" y="229.333" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="76" gid="454" x="447.333" y="367.333" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="77" gid="454" x="447.333" y="408.667" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="78" gid="454" x="445.333" y="636.667" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="80" gid="454" x="452" y="878" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="81" gid="454" x="454" y="1220.67" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="82" gid="454" x="454" y="1170.67" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="83" gid="454" x="453.333" y="1592" width="16" height="16">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="name" value="car_spawner"/>
+   </properties>
+  </object>
+  <object id="84" gid="482" x="20" y="606.667" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="name" value="car_spawner"/>
    </properties>
   </object>
  </objectgroup>

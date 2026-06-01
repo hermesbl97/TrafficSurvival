@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.svalero.trafficsurvive.domain.BubbleEnemy;
+import com.svalero.trafficsurvive.domain.CarSpawner;
 
 public class LevelManager {
     private LogicManager logicManager;
@@ -45,19 +46,27 @@ public class LevelManager {
             if (mapObject instanceof TiledMapTileMapObject) {
                 TiledMapTileMapObject object = (TiledMapTileMapObject) mapObject;
 
-                if (object.getProperties().get("name") != null &&
-                    object.getProperties().get("name").equals("bubble_pink")) {
+                float x = object.getProperties().get("x", Float.class);
+                float y = object.getProperties().get("y", Float.class);
 
-                    float x = object.getX();
-                    float y = object.getY();
+                String objectName = object.getProperties().get("name", String.class);
+
+                if (objectName != null && objectName.equals("bubble_pink")) {
 
                     BubbleEnemy enemy = new BubbleEnemy(ResourceManager.getRegion("bubble_pink_pos2"), new Vector2(x, y));
                     logicManager.addEnemy(enemy);
+
+                } else if (objectName != null && objectName.equals("car_spawner")) {
+
+                    // Recogemos la dirección de tu otra propiedad personalizada
+                    String direction = object.getProperties().get("direction", "right", String.class);
+
+                    CarSpawner spawner = new CarSpawner(new Vector2(x, y), direction);
+                    logicManager.addSpawner(spawner);
                 }
             }
         }
     }
-
     // Comprueba si una coordenada del nivel colisiona con el terreno
     public boolean isCellCellBlocked(float x, float y) {
         // Convertimos los píxeles del juego a coordenadas de la rejilla de Tiled
@@ -75,6 +84,8 @@ public class LevelManager {
         // Si la celda no es nula, significa que contiene un azulejo del terreno, por lo que colisiona
         return cell != null;
     }
+
+
 
     private void loadItems() {
 

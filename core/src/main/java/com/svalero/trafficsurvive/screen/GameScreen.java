@@ -2,6 +2,7 @@ package com.svalero.trafficsurvive.screen;
 
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.svalero.trafficsurvive.manager.CameraManager;
 import com.svalero.trafficsurvive.manager.LevelManager;
 import com.svalero.trafficsurvive.manager.LogicManager;
@@ -29,6 +30,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float v) {
+        com.badlogic.gdx.Gdx.gl.glClearColor(0, 0, 0, 1);
+        com.badlogic.gdx.Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         logicManager.update(v, levelManager);
         cameraManager.handleCamera();
         renderManager.drawFrame(v);
