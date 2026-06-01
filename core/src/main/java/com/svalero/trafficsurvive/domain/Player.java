@@ -16,8 +16,13 @@ import static com.svalero.trafficsurvive.util.Constants.PLAYER_SPEED;
 @Data
 public class Player extends Character implements Disposable {
 
+    private int score = 0;
+    private int lives = 1;
+    private boolean immune = false;
+    private float immunityTimer;
+
     public Player(TextureRegion texture) {
-        super(texture, new Vector2(100, 100), IDLE_FRONT);
+        super(texture, new Vector2(100, 0), IDLE_FRONT);
 
         stateTime = 0f;
 
@@ -110,6 +115,27 @@ public class Player extends Character implements Disposable {
                 currentFrame = movingRightAnimation.getKeyFrame(stateTime, true);
                 break;
         }
+
+        if (immune) {
+            immunityTimer -= delta;
+            if (immunityTimer <= 0) {
+                immune = false;
+                System.out.println("La inmunidad se ha terminado");
+            }
+        }
+    }
+
+    public void addScore(int points) { this.score += points; }
+
+    public void addLife() { this.lives++; }
+
+    public void activateImmunity(float duration) {
+        this.immune = true;
+        this.immunityTimer = duration;
+    }
+
+    public void removeLife() {
+        lives --;
     }
 
     @Override
