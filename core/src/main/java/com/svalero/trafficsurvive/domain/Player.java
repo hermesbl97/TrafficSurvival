@@ -42,6 +42,8 @@ public class Player extends Character implements Disposable {
             ResourceManager.getRegion("player3_move_back"),
             ResourceManager.getRegion("player3_move_back2")
         );
+
+        this.rectangle.setSize(16, 16);
     }
 
     public void draw(Batch batch) {
