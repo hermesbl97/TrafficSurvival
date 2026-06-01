@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="30" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="64">
  <tileset firstgid="1" name="background3" tilewidth="16" tileheight="16" tilecount="486" columns="27">
-  <image source="../../../kenney_rpg-urban-pack (1)/Tilemap/tilemap_packed.png" width="432" height="288"/>
+  <image source="tilemap_packed.png" width="432" height="288"/>
  </tileset>
  <tileset firstgid="487" name="background2" tilewidth="21" tileheight="21" tilecount="900" columns="30">
-  <image source="../../../kenney_platformer-art-pixel/Tilemap/tilemap_packed.png" width="630" height="630"/>
+  <image source="tilemap_packed2.png" width="630" height="630"/>
  </tileset>
  <layer id="1" name="background" width="30" height="120">
   <data encoding="base64">
