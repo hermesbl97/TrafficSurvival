@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -16,9 +17,11 @@ public class LogicManager implements Disposable {
     protected Player player;
     protected Array<BubbleEnemy> enemies;
     private Music backgroundMusic;
+    private Sound collisionSound;
 
     public LogicManager() {
         backgroundMusic = ResourceManager.getMusic("background.mp3");
+        collisionSound = ResourceManager.getSound("bump.mp3");
         this.enemies = new Array<>();
 
     }
@@ -33,32 +36,45 @@ public class LogicManager implements Disposable {
         }
     }
 
-    public void update(float v) {
+    public void update(float v, LevelManager levelManager) {
+        // Guardamos posición segura
         float oldX = player.getPosition().x;
         float oldY = player.getPosition().y;
 
+        // Movemos al jugador según las teclas pulsadas y lo actualizamos para crear la animación
         player.handleInput(v);
         player.update(v);
 
+        // Calculamos las esquinas de la caja de colisión (Rectangle) del jugador en su nueva posición
+        float playerLeft = player.getRectangle().x;
+        float playerRight = player.getRectangle().x + player.getRectangle().width;
+        float playerBottom = player.getRectangle().y;
+        float playerTop = player.getRectangle().y + player.getRectangle().height;
+
+        // Comprobamos las 4 esquinas del jugador contra la capa terrain
+        boolean collision =
+            levelManager.isCellCellBlocked(playerLeft, playerBottom) || // Esquina inferior izquierda
+                levelManager.isCellCellBlocked(playerRight, playerBottom) || // Esquina inferior derecha
+                levelManager.isCellCellBlocked(playerLeft, playerTop) ||    // Esquina superior izquierda
+                levelManager.isCellCellBlocked(playerRight, playerTop);     // Esquina superior derecha
+
+        // Hay colisión
+        if (collision) {
+            player.getPosition().x = oldX;
+            player.getPosition().y = oldY;
+            player.getRectangle().setPosition(oldX, oldY); // Sincronizamos el rectángulo también
+
+            if (ConfigurationManager.isSoundEnabled()) {
+                collisionSound.play(); //Sonido colisión
+            }
+        }
+
+        // Actualización de enemigos
         for(BubbleEnemy enemy : enemies) {
             enemy.update(v);
         }
 
-//        //si chocan, lo devolvemos a la posición segura
-//        if (player.getRectangle().overlaps(tree.getRectangle())) {
-//            player.getPosition().x = oldX;
-//            player.getPosition().y = oldY;
-//
-//            player.getPosition().y -= 5;
-//            player.getRectangle().setPosition(oldX, oldY);
-//
-//            if (ConfigurationManager.isSoundEnabled()) {
-//                collisionSound.play();
-//            }
-//        }
-
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            // Volver al menú principal
             ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
         }
     }

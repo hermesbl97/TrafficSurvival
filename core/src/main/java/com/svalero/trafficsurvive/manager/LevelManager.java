@@ -23,7 +23,6 @@ public class LevelManager {
 
     public LevelManager(LogicManager logicManager) {
         this.logicManager = logicManager;
-
         currentLevel = 2;
     }
 
@@ -57,6 +56,24 @@ public class LevelManager {
                 }
             }
         }
+    }
+
+    // Comprueba si una coordenada del nivel colisiona con el terreno
+    public boolean isCellCellBlocked(float x, float y) {
+        // Convertimos los píxeles del juego a coordenadas de la rejilla de Tiled
+        int cellX = (int) (x / collisionLayer.getTileWidth());
+        int cellY = (int) (y / collisionLayer.getTileHeight());
+
+        // Si el jugador se sale de los límites del mapa, decimos que está bloqueado
+        if (cellX < 0 || cellX >= collisionLayer.getWidth() || cellY < 0 || cellY >= collisionLayer.getHeight()) {
+            return true;
+        }
+
+        // Conseguimos la celda de esa posición
+        TiledMapTileLayer.Cell cell = collisionLayer.getCell(cellX, cellY);
+
+        // Si la celda no es nula, significa que contiene un azulejo del terreno, por lo que colisiona
+        return cell != null;
     }
 
     private void loadItems() {

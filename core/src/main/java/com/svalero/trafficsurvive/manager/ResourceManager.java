@@ -15,6 +15,7 @@ public class ResourceManager {
         //Cargamos las texturas del juego
         assetManager.load("trafficsurvival.atlas", TextureAtlas.class); // cargamos TextureAtlas
         loadMusics();
+        loadSounds();
     }
 
     public static boolean update() {
@@ -26,9 +27,16 @@ public class ResourceManager {
         assetManager.load("sounds/background.mp3", Music.class);
     }
 
+    public static void loadSounds() {
+        assetManager.load("sounds/bump.mp3", Sound.class);
+    }
 
     public static Music getMusic(String name) {
         return assetManager.get("sounds/" + name, Music.class);
+    }
+
+    public static Sound getSound(String name) {
+        return assetManager.get("sounds/" + name, Sound.class);
     }
 
     public static TextureRegion getRegion(String name) {
