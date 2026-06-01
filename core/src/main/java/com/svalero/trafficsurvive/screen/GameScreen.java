@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float v) {
-        logicManager.update(v);
+        logicManager.update(v, levelManager);
         cameraManager.handleCamera();
         renderManager.drawFrame(v);
     }
