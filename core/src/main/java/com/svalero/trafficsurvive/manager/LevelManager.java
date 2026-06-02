@@ -67,6 +67,9 @@ public class LevelManager {
 
                     CarSpawner spawner = new CarSpawner(new Vector2(x, y), direction);
                     logicManager.addSpawner(spawner);
+                } else if (objectName != null && objectName.equals("elderly")) {
+                    ElderlyEnemy elderly = new ElderlyEnemy(new Vector2(x, y));
+                    logicManager.addEnemy(elderly);
                 }
             }
         }
@@ -133,9 +136,5 @@ public class LevelManager {
                 }
             }
         }
-    }
-
-    public void restartCurrentLevel() {
-
     }
 }

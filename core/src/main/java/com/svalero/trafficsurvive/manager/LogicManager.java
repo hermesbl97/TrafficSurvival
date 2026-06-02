@@ -11,6 +11,7 @@ import com.svalero.trafficsurvive.domain.*;
 import com.svalero.trafficsurvive.domain.Character;
 import lombok.Getter;
 
+import static com.svalero.trafficsurvive.domain.Character.State.IDLE_BACK;
 import static com.svalero.trafficsurvive.util.Constants.GAME_NAME;
 
 public class LogicManager implements Disposable {
@@ -93,14 +94,15 @@ public class LogicManager implements Disposable {
 
         // Comprobamos si el estado actual del jugador es uno de los IDLE
         boolean isPlayerIdle = player.getState() == Character.State.IDLE_FRONT ||
-            player.getState() == Character.State.IDLE_BACK ||
+            player.getState() == IDLE_BACK ||
             player.getState() == Character.State.IDLE_LEFT ||
             player.getState() == Character.State.IDLE_RIGHT;
 
+        // Si el jugador está quieto
         if (isPlayerIdle) {
             if (!batSpawned) { //si no hay muricelago
                 idleTimer += v;
-                if (idleTimer >= 5f) { // Si ha estado 5 segundos sin moverse aparece el muricelago
+                if (idleTimer >= 3f) { // Si ha estado 3 segundos sin moverse aparece el muricelago
                     batSpawned = true;
                     if (ConfigurationManager.isMusicEnabled()) {
                         batEntranceMusic.setLooping(true);
@@ -202,6 +204,21 @@ public class LogicManager implements Disposable {
             Character enemy = enemies.get(i);
             enemy.update(v);
 
+            // Si el coche atropella al anciano se acaba la partida
+            if (enemy instanceof ElderlyEnemy) {
+                for (Character otherEnemy : enemies) {
+                    if (otherEnemy instanceof CarEnemy && enemy.getRectangle().overlaps(otherEnemy.getRectangle())) {
+                        System.out.println(" Has empujado al anciano a la carretera y lo han atropellado... Se acabó tu partida");
+                        if (ConfigurationManager.isSoundEnabled()) {
+                            crashSound.play();
+                        }
+                        player.takeScore(150);
+                        finalizarPartida();
+                        return;
+                    }
+                }
+            }
+
             if (player.getRectangle().overlaps(enemy.getRectangle())) {
                 // Si no eres inmune puedes colisionar
                 if (!player.isImmune()) {
@@ -243,6 +260,18 @@ public class LogicManager implements Disposable {
                         batSpawned = false;
                         enemies.removeIndex(i); // Lo eliminamos del juego
                         continue;
+                    } else if (enemy instanceof ElderlyEnemy) {
+                        System.out.println("¡Has empujado al anciano!");
+                        ElderlyEnemy elderly = (ElderlyEnemy) enemy;
+
+                        // Desplazamos al anciano 3 celdas hacia arriba
+                        float elderlyNuevaY = elderly.getPosition().y + (3 * 16f);
+
+                        elderly.getPosition().y = elderlyNuevaY;
+                        elderly.getRectangle().setPosition(elderly.getPosition().x, elderlyNuevaY);
+
+                        //Ponemos el anciano en nuestra dirección para dar más pena
+                        elderly.setState(IDLE_BACK);
                     }
                 }
             }
