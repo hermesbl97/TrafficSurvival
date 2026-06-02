@@ -8,9 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisList;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.svalero.trafficsurvive.manager.ResourceManager;
+import com.svalero.trafficsurvive.manager.ScoreManager;
 
 /** First screen of the application. Displayed after the application is created. */
 public class MainMenuScreen implements Screen {
@@ -35,6 +38,8 @@ public class MainMenuScreen implements Screen {
         VisTable table = new VisTable(true);
         table.setFillParent(true);
         stage.addActor(table);
+
+        VisTable menuLeftTable = new VisTable(true);
 
         VisTextButton playButton = new VisTextButton("Jugar");
         playButton.addListener(new ClickListener() {
@@ -62,15 +67,27 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        table.row(); //ordenamos la tabla
-        table.add(playButton).center().width(200).height(50).pad(10);
-        table.row();
-        table.add(configurationButton).center().width(200).height(50).pad(10);
-        table.row();
-        table.add(exitButton).center().width(200).height(50).pad(10);
+        menuLeftTable.add(playButton).center().width(200).height(50).pad(10).row();
+        menuLeftTable.add(configurationButton).center().width(200).height(50).pad(10).row();
+        menuLeftTable.add(exitButton).center().width(200).height(50).pad(10).row();
 
-        Gdx.input.setInputProcessor(stage);
-    }
+    // --- SUBTABLA DERECHA: LA TABLA DE PUNTUACIONES ---
+        VisTable scoreRightTable = new VisTable(true);
+
+        VisLabel rankingTitle = new VisLabel("Top 10 Records");
+
+        VisList<String> scoreList = new VisList<>();
+        // Cargamos los datos limpios y ordenados desde el HighScoreManager
+        scoreList.setItems(ScoreManager.getTop10Scores());
+
+        // Montamos el título y la lista en la subtabla derecha
+        scoreRightTable.add(rankingTitle).padBottom(15).center().row();
+        scoreRightTable.add(scoreList).width(280).height(200).center();
+
+        table.add(menuLeftTable).pad(30).center();
+        table.add(scoreRightTable).pad(30).center();
+
+        Gdx.input.setInputProcessor(stage);    }
 
     @Override
     public void render(float delta) {
@@ -107,6 +124,9 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
+        // Destruimos el stage para liberar memoria al cambiar de pantalla
+        if (stage != null) {
+            stage.dispose();
+        }
     }
 }

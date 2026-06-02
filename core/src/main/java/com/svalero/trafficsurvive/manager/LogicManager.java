@@ -15,13 +15,16 @@ import lombok.Getter;
 
 public class LogicManager implements Disposable {
 
+    @Getter
     protected Player player;
     protected Array<Character> enemies;
     protected Array<CarSpawner> spawners;
     @Getter
     protected Array<Item> items = new Array<>();
     private Music backgroundMusic;
-    private Sound collisionSound, crashSound, coinSound, diamondSound, lifeSound, bubbleSound;
+    private Sound collisionSound, crashSound, coinSound, diamondSound, lifeSound, bubbleSound, victorySound;
+    @Getter
+    private boolean partidaFinalizada = false;
 
     public LogicManager() {
         backgroundMusic = ResourceManager.getMusic("background.mp3");
@@ -31,6 +34,7 @@ public class LogicManager implements Disposable {
         diamondSound = ResourceManager.getSound("getDiamond.mp3");
         lifeSound = ResourceManager.getSound("getLife.mp3");
         bubbleSound = ResourceManager.getSound("removeLife.mp3");
+        victorySound = ResourceManager.getSound("victory.mp3");
 
         this.enemies = new Array<>();
         this.spawners = new Array<>();
@@ -60,38 +64,42 @@ public class LogicManager implements Disposable {
     }
 
     public void update(float v, LevelManager levelManager) {
+        //si la partida ha terminado nos salimos
+        if (partidaFinalizada) return;
+
         // Actualizamos los spawners para que generen coches continuamente
         for (CarSpawner spawner : spawners) {
             spawner.update(v, this);
         }
 
-        // GUARDA POSICIÓN ANTES DEL MOVIMIENTO
+        // Guarda la posición antes de moverse
         float oldX = player.getPosition().x;
         float oldY = player.getPosition().y;
 
         player.handleInput(v);
         player.update(v);
 
-        // CALCULAR ESQUINAS DEL RECTÁNGULO ACTUALIZADO
+        // Calcula las esquinas del rectangulo de colision
         float playerLeft = player.getRectangle().x;
         float playerRight = player.getRectangle().x + player.getRectangle().width;
         float playerBottom = player.getRectangle().y;
         float playerTop = player.getRectangle().y + player.getRectangle().height;
 
-        // COMPROBAR COLISIÓN CONTRA EL MAPA
+        // Comprueba la colisión respecto al mapa
         boolean collision =
             levelManager.isCellCellBlocked(playerLeft, playerBottom) || // Inferior Izquierda
                 levelManager.isCellCellBlocked(playerRight, playerBottom) || // Inferior Derecha
                 levelManager.isCellCellBlocked(playerLeft, playerTop) ||    // Superior Izquierda
                 levelManager.isCellCellBlocked(playerRight, playerTop);     // Superior Derecha
 
-        // SI CHOCO, DESHACO EL MOVIMIENTO INMEDIATAMENTE
+        // Si choca deshace el movimiento
         if (collision) {
-            // Devolvemos el vector de posición a donde estaba seguro
+            // Devolvemos el jugador a la posición donde estaba seguro
             player.getPosition().x = oldX;
             player.getPosition().y = oldY;
 
             player.getRectangle().setPosition(oldX, oldY);
+            player.takeScore(5);
 
             if (ConfigurationManager.isSoundEnabled()) {
                 collisionSound.play();
@@ -103,24 +111,30 @@ public class LogicManager implements Disposable {
 
             if (player.getRectangle().overlaps(item.getRectangle())) {
                 if (item instanceof CoinItem) {
-                    player.addScore(10);
+                    player.addScore(30);
                     coinSound.play();
-                    System.out.println("Moneda cogida. Suma 10 Puntos ");
+                    System.out.println("Moneda cogida. Suma 30 Puntos ");
                 } else if (item instanceof DiamondItem) {
                     player.activateImmunity(12f);
+                    player.addScore(15);
                     diamondSound.play();
-                    System.out.println("Diamante cogido, Inmune por 12 segundos.");
+                    System.out.println("Diamante cogido, Inmune por 12 segundos. Sumas 15 puntos");
                 } else if (item instanceof LifeItem) {
                     player.addLife();
                     lifeSound.play();
                     System.out.println("Suma una vida");
+                } else if (item instanceof ExitItem) {
+                    System.out.println("¡HAS LLEGADO A LA META!");
+                    player.addScore(50);
+                    finalizarPartida();
                 }
+
                 // Lo quitamos de la pantalla
                 items.removeIndex(i);
             }
         }
 
-        // Actualizar y comprobar colisiones con enemigos (burbujas y coches)
+        // Actualizar y comprobar colisiones con enemigos
         for (int i = enemies.size - 1; i >= 0; i--) {
             Character enemy = enemies.get(i);
             enemy.update(v);
@@ -136,16 +150,17 @@ public class LogicManager implements Disposable {
                         player.removeLife();
                         System.out.println("Pierdes una vida");
 
-                        // Reaparecemos al inicio seguro (X=100, Y=0 según el constructor de tu Player)
+                        // Reaparecemos al inicio después de colosionar y hemos perdido una vida
                         player.getPosition().set(100, 0);
                         player.getRectangle().setPosition(100, 0);
 
                         if (player.getLives() <= 0) {
                             System.out.println(" Te has quedado sin vidas.");
-                            // TODO Mensaje derrota y sugerencia jugar nueva partida
+                            finalizarPartida();
                         }
                     } else if (enemy instanceof BubbleEnemy) {
                         bubbleSound.play();
+                        player.takeScore(25);
                         System.out.println("Te ha tocado una burbuja rosa");
                         //TODO al chocar te mueves al revés
                     }
@@ -159,6 +174,16 @@ public class LogicManager implements Disposable {
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
+        }
+    }
+
+    private void finalizarPartida() {
+        if (partidaFinalizada) return;
+        partidaFinalizada = true;
+
+        // Paramos la música de fondo
+        if (backgroundMusic.isPlaying()) {
+            backgroundMusic.stop();
         }
     }
 

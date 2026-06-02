@@ -112,6 +112,9 @@ public class LevelManager {
                 } else if (itemName != null && itemName.equals("item_life")) {
                     LifeItem item = new LifeItem(ResourceManager.getRegion("heart"), new Vector2(x, y));
                     logicManager.addItem(item);
+                } else if (itemName != null && itemName.equals("exit")) {
+                    ExitItem item = new ExitItem(ResourceManager.getRegion("exit"), new Vector2(x, y));
+                    logicManager.addItem(item);
                 }
             }
         }
