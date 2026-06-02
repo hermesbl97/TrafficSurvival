@@ -25,6 +25,7 @@ public class ResourceManager {
 
     public static void loadMusics() {
         assetManager.load("sounds/background.mp3", Music.class);
+        assetManager.load("sounds/bat_wings.mp3", Music.class);
     }
 
     public static void loadSounds() {
@@ -35,6 +36,7 @@ public class ResourceManager {
         assetManager.load("sounds/getLife.mp3", Sound.class);
         assetManager.load("sounds/removeLife.mp3", Sound.class);
         assetManager.load("sounds/victory.mp3", Sound.class);
+        assetManager.load("sounds/bite.mp3", Sound.class);
     }
 
     public static Music getMusic(String name) {

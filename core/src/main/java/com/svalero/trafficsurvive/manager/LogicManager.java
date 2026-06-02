@@ -25,13 +25,16 @@ public class LogicManager implements Disposable {
     protected Array<CarSpawner> spawners;
     @Getter
     protected Array<Item> items = new Array<>();
-    private Music backgroundMusic;
-    private Sound collisionSound, crashSound, coinSound, diamondSound, lifeSound, bubbleSound, victorySound;
+    private Music backgroundMusic, batEntranceMusic;
+    private Sound collisionSound, crashSound, coinSound, diamondSound, lifeSound, bubbleSound, victorySound, biteSound;
     @Getter
     private boolean partidaFinalizada = false;
+    private float idleTimer = 0f;           // Cuenta el tiempo que lleva quieto
+    private boolean batSpawned = false;     // Evita que salgan varios murciélagos a la vez
 
     public LogicManager() {
         backgroundMusic = ResourceManager.getMusic("background.mp3");
+        batEntranceMusic = ResourceManager.getMusic("bat_wings.mp3");
         collisionSound = ResourceManager.getSound("bump.mp3");
         crashSound = ResourceManager.getSound("crash.mp3");
         coinSound = ResourceManager.getSound("getCoin.mp3");
@@ -39,6 +42,7 @@ public class LogicManager implements Disposable {
         lifeSound = ResourceManager.getSound("getLife.mp3");
         bubbleSound = ResourceManager.getSound("removeLife.mp3");
         victorySound = ResourceManager.getSound("victory.mp3");
+        biteSound = ResourceManager.getSound("bite.mp3");
 
         this.enemies = new Array<>();
         this.spawners = new Array<>();
@@ -91,6 +95,37 @@ public class LogicManager implements Disposable {
         player.handleInput(v);
         player.update(v);
 
+        // Comprobamos si el estado actual del jugador es uno de los IDLE
+        boolean isPlayerIdle = player.getState() == Character.State.IDLE_FRONT ||
+            player.getState() == Character.State.IDLE_BACK ||
+            player.getState() == Character.State.IDLE_LEFT ||
+            player.getState() == Character.State.IDLE_RIGHT;
+
+        if (isPlayerIdle) {
+            if (!batSpawned) { //si no hay muricelago
+                idleTimer += v;
+                if (idleTimer >= 5f) { // Si ha estado 5 segundos sin moverse aparece el muricelago
+                    batSpawned = true;
+                    if (ConfigurationManager.isMusicEnabled()) {
+                        batEntranceMusic.setLooping(true);
+                        batEntranceMusic.play();
+                    }
+                    idleTimer = 0f; //devuelve el valor a 0
+
+                    // Aparece en el lateral derecho del mapa a la misma altura (Y) que el jugador
+                    float spawnX = (30 * 16f) + 30f;
+                    float spawnY = player.getPosition().y;
+
+                    // Lo añadimos a la lista de enemigos
+                    addEnemy(new BatEnemy(spawnX, spawnY, player));
+                    System.out.println("Un murciélago ha detectado que no te mueves");
+                }
+            }
+        } else {
+            // Si el jugador realiza cualquier movimiento, el temporizador vuelve a empezar
+            idleTimer = 0f;
+        }
+
         // Calcula las esquinas del rectangulo de colision
         float playerLeft = player.getRectangle().x;
         float playerRight = player.getRectangle().x + player.getRectangle().width;
@@ -118,7 +153,7 @@ public class LogicManager implements Disposable {
             }
         }
 
-        //Colisión con agua
+        // Colisión con agua
         boolean isInWater =
             levelManager.isCellWater(playerLeft, playerBottom) ||
                 levelManager.isCellWater(playerRight, playerBottom) ||
@@ -156,6 +191,7 @@ public class LogicManager implements Disposable {
                     System.out.println("Suma una vida");
                 } else if (item instanceof ExitItem) {
                     System.out.println("¡HAS LLEGADO A LA META!");
+                    victorySound.play();
                     player.addScore(50);
                     finalizarPartida();
                 }
@@ -196,12 +232,31 @@ public class LogicManager implements Disposable {
                         player.invertControls(15f);
                         System.out.println("Te ha tocado una burbuja rosa");
                         enemies.removeIndex(i);
+                    } else if (enemy instanceof BatEnemy) {
+                        if (ConfigurationManager.isSoundEnabled()) {
+                            if (batEntranceMusic.isPlaying()) {
+                                batEntranceMusic.stop();
+                            }
+                            biteSound.play();
+                        }
+
+                        player.setScore(0); //Deja su puntuación a 0
+                        System.out.println("El murcielago te ha alcanzado");
+
+                        // Lo ponemos a false por si vuelve a quedarse a 0
+                        batSpawned = false;
+                        enemies.removeIndex(i); // Lo eliminamos del juego
+                        continue;
                     }
                 }
             }
 
             if (enemy instanceof CarEnemy && ((CarEnemy) enemy).isShouldRemove()) {
                 enemies.removeIndex(i);
+            } else if (enemy instanceof BatEnemy && ((BatEnemy) enemy).isShouldRemove()) {
+                batSpawned = false; // Permitimos que pueda volver a salir otro si el jugador se queda quieto de nuevo
+                enemies.removeIndex(i); // Lo eliminamos de la lista definitivamente
+                System.out.println("El murciélago se ha cansado de esperar y se ha ido.");
             }
         }
 
