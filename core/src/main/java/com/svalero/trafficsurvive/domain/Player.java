@@ -17,7 +17,7 @@ import static com.svalero.trafficsurvive.util.Constants.PLAYER_SPEED;
 public class Player extends Character implements Disposable {
 
     private int score = 0;
-    private int lives = 1;
+    private int lives = 2;
     private boolean immune = false;
     private float immunityTimer;
 
@@ -126,6 +126,8 @@ public class Player extends Character implements Disposable {
     }
 
     public void addScore(int points) { this.score += points; }
+
+    public void takeScore(int points) { this.score -= points; }
 
     public void addLife() { this.lives++; }
 

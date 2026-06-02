@@ -34,6 +34,7 @@ public class ResourceManager {
         assetManager.load("sounds/getDiamond.mp3", Sound.class);
         assetManager.load("sounds/getLife.mp3", Sound.class);
         assetManager.load("sounds/removeLife.mp3", Sound.class);
+        assetManager.load("sounds/victory.mp3", Sound.class);
     }
 
     public static Music getMusic(String name) {
