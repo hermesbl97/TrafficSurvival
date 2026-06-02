@@ -9,6 +9,7 @@
     import com.badlogic.gdx.utils.Disposable;
     import com.svalero.trafficsurvive.domain.*;
     import com.svalero.trafficsurvive.domain.Character;
+    import com.svalero.trafficsurvive.screen.GameScreen;
     import lombok.Getter;
 
     import static com.svalero.trafficsurvive.domain.Character.State.IDLE_BACK;
@@ -78,7 +79,7 @@
             this.items.add(item);
         }
 
-        public void update(float v, LevelManager levelManager) {
+        public void update(float v, LevelManager levelManager, GameScreen gameScreen) {
             //si la partida ha terminado nos salimos
             if (partidaFinalizada) return;
 
@@ -118,7 +119,7 @@
 
                         // Lo añadimos a la lista de enemigos
                         addEnemy(new BatEnemy(spawnX, spawnY, player));
-                        System.out.println("Un murciélago ha detectado que no te mueves");
+                        gameScreen.showAlert("A los murcielagos no le gustan la inactividad");
                     }
                 }
             } else {
@@ -173,21 +174,19 @@
                     if (item instanceof CoinItem) {
                         if (player.getTypePlayer() == 2) {
                             player.addScore(45);
-                            System.out.println("Suma 45 Puntos por la moneda");
                         } else {
                             player.addScore(35);
-                            System.out.println("Suma 35 Puntos por la moneda");
                         }
                         coinSound.play();
                     } else if (item instanceof DiamondItem) {
                         player.activateImmunity(12f);
                         player.addScore(15);
                         diamondSound.play();
-                        System.out.println("Diamante cogido, Inmune por 12 segundos. Sumas 15 puntos");
+                        gameScreen.showAlert("Este diamante te da inmunidad por 12 segundos");
                     } else if (item instanceof LifeItem) {
                         player.addLife();
                         lifeSound.play();
-                        System.out.println("Suma una vida");
+                        gameScreen.showAlert("Esta vida extra te viene como anillo al dedo");
                     } else if (item instanceof ExitItem) {
                         victorySound.play();
                         player.addScore(50);
@@ -227,7 +226,7 @@
                             }
 
                             player.removeLife();
-                            System.out.println("Pierdes una vida");
+                            gameScreen.showAlert("¡Te han atropellado! Pierdes una vida");
 
                             // Reaparecemos al inicio después de colosionar y hemos perdido una vida
                             player.getPosition().set(100, 0);
@@ -241,7 +240,7 @@
                             bubbleSound.play();
                             player.takeScore(20);
                             player.invertControls(15f);
-                            System.out.println("Te ha tocado una burbuja rosa");
+                            gameScreen.showAlert("No te estás volviendo loco. Deja las burbujas en paz");
                             enemies.removeIndex(i);
                         } else if (enemy instanceof BatEnemy) {
                             if (ConfigurationManager.isSoundEnabled()) {
@@ -252,14 +251,14 @@
                             }
 
                             player.setScore(0); //Deja su puntuación a 0
-                            System.out.println("El murcielago te ha alcanzado");
+                            gameScreen.showAlert("Te han cazado... Pues te has quedado sin puntos ");
 
                             // Lo ponemos a false por si vuelve a quedarse a 0
                             batSpawned = false;
                             enemies.removeIndex(i); // Lo eliminamos del juego
                             continue;
                         } else if (enemy instanceof ElderlyEnemy) {
-                            System.out.println("¡Has empujado al anciano!");
+                            gameScreen.showAlert("Pero cuidado con el anciano");
                             ElderlyEnemy elderly = (ElderlyEnemy) enemy;
 
                             // Desplazamos al anciano 3 celdas hacia arriba

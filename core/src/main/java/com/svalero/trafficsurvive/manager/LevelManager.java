@@ -11,11 +11,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.svalero.trafficsurvive.domain.*;
+import lombok.Getter;
 
 public class LevelManager {
     private LogicManager logicManager;
     OrthogonalTiledMapRenderer mapRenderer;
     public Batch batch;
+    @Getter
     private int currentLevel;
     TiledMap map;
     TiledMapTileLayer collisionLayer;
