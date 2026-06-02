@@ -44,6 +44,9 @@ public class LevelManager {
 
         loadEnemies();
         loadItems();
+
+        AlienEnemy dancingAlien = new AlienEnemy(new Vector2(20f, 330f));
+        logicManager.addEnemy(dancingAlien);
     }
 
     private void loadEnemies() {
