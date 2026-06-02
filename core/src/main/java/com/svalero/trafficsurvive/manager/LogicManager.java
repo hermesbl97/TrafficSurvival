@@ -28,6 +28,8 @@
         private boolean partidaFinalizada = false;
         private float idleTimer = 0f;           // Cuenta el tiempo que lleva quieto
         private boolean batSpawned = false;     // Evita que salgan varios murciélagos a la vez
+        @Getter
+        private String endMessage = "";
 
         public LogicManager() {
             backgroundMusic = ResourceManager.getMusic("background.mp3");
@@ -160,8 +162,7 @@
 
             if (isInWater) {
                 player.takeScore(50);
-                finalizarPartida();
-                System.out.println("Te has ahogado");
+                finalizarPartida("¿Ya? Te has ahogado. Te avisé de las clases de natación");
             }
 
             for (int i = items.size - 1; i >= 0; i--) {
@@ -188,10 +189,9 @@
                         lifeSound.play();
                         System.out.println("Suma una vida");
                     } else if (item instanceof ExitItem) {
-                        System.out.println("¡HAS LLEGADO A LA META!");
                         victorySound.play();
                         player.addScore(50);
-                        finalizarPartida();
+                        finalizarPartida("¡Enhorabuena! Lo has logrado");
                     }
 
                     // Lo quitamos de la pantalla
@@ -208,12 +208,11 @@
                 if (enemy instanceof ElderlyEnemy) {
                     for (Character otherEnemy : enemies) {
                         if (otherEnemy instanceof CarEnemy && enemy.getRectangle().overlaps(otherEnemy.getRectangle())) {
-                            System.out.println(" Has empujado al anciano a la carretera y lo han atropellado... Se acabó tu partida");
                             if (ConfigurationManager.isSoundEnabled()) {
                                 crashSound.play();
                             }
                             player.takeScore(150);
-                            finalizarPartida();
+                            finalizarPartida("Has empujado al anciano a la carretera y lo han atropellado... Se acabó tu partida");
                             return;
                         }
                     }
@@ -235,9 +234,8 @@
                             player.getRectangle().setPosition(100, 0);
 
                             if (player.getLives() <= 0) {
-                                System.out.println(" Te has quedado sin vidas.");
                                 player.takeScore(50);
-                                finalizarPartida();
+                                finalizarPartida("Mira antes de cruzar. No te quedan más huesos");
                             }
                         } else if (enemy instanceof BubbleEnemy) {
                             bubbleSound.play();
@@ -281,14 +279,14 @@
                 } else if (enemy instanceof BatEnemy && ((BatEnemy) enemy).isShouldRemove()) {
                     batSpawned = false; // Permitimos que pueda volver a salir otro si el jugador se queda quieto de nuevo
                     enemies.removeIndex(i); // Lo eliminamos de la lista definitivamente
-                    System.out.println("El murciélago se ha cansado de esperar y se ha ido.");
                 }
             }
         }
 
-        private void finalizarPartida() {
+        private void finalizarPartida(String message) {
             if (partidaFinalizada) return;
             partidaFinalizada = true;
+            this.endMessage = message;
 
             // Paramos la música de fondo
             if (backgroundMusic.isPlaying()) {
