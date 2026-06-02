@@ -57,7 +57,7 @@ public class LevelManager {
 
                 if (objectName != null && objectName.equals("bubble_pink")) {
 
-                    BubbleEnemy enemy = new BubbleEnemy(ResourceManager.getRegion("bubble_pink_pos2"), new Vector2(x, y));
+                    BubbleEnemy enemy = new BubbleEnemy(ResourceManager.getRegion("bubble_pink_pos2"), new Vector2(x, y), logicManager.getPlayer());
                     logicManager.addEnemy(enemy);
 
                 } else if (objectName != null && objectName.equals("car_spawner")) {
