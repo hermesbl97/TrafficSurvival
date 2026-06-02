@@ -1,18 +1,14 @@
 package com.svalero.trafficsurvive.manager;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.svalero.trafficsurvive.domain.*;
 import com.svalero.trafficsurvive.domain.Character;
-import com.svalero.trafficsurvive.screen.ConfigurationScreen;
 import lombok.Getter;
 
 import static com.svalero.trafficsurvive.util.Constants.GAME_NAME;
@@ -259,10 +255,6 @@ public class LogicManager implements Disposable {
                 System.out.println("El murciélago se ha cansado de esperar y se ha ido.");
             }
         }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new ConfigurationScreen());
-        }
     }
 
     private void finalizarPartida() {
@@ -272,6 +264,45 @@ public class LogicManager implements Disposable {
         // Paramos la música de fondo
         if (backgroundMusic.isPlaying()) {
             backgroundMusic.stop();
+        }
+    }
+
+    public void toggleBackgroundMusic(boolean enable) {
+        if (enable) {
+            if (!backgroundMusic.isPlaying() && ConfigurationManager.isMusicEnabled()) {
+                backgroundMusic.setLooping(true);
+                backgroundMusic.setVolume(0.3f);
+                backgroundMusic.play();
+            }
+        } else {
+            if (backgroundMusic.isPlaying()) {
+                backgroundMusic.pause(); // Lo pausamos
+            }
+            if (batEntranceMusic.isPlaying()) {
+                batEntranceMusic.pause();
+            }
+        }
+    }
+
+    // Silencia los efectos de sonido
+    public void stopAllSounds() {
+        collisionSound.stop();
+        crashSound.stop();
+        coinSound.stop();
+        diamondSound.stop();
+        lifeSound.stop();
+        bubbleSound.stop();
+        victorySound.stop();
+        biteSound.stop();
+    }
+
+    // Silencia la musica
+    public void stopAllMusic() {
+        if (backgroundMusic.isPlaying()) {
+            backgroundMusic.stop();
+        }
+        if (batEntranceMusic.isPlaying()) {
+            batEntranceMusic.stop();
         }
     }
 
