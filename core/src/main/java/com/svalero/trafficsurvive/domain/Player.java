@@ -16,7 +16,7 @@ import static com.svalero.trafficsurvive.util.Constants.PLAYER_SPEED;
 @Data
 public class Player extends Character implements Disposable {
 
-    private int score = 0;
+    private int score = 200;
     private int lives = 2;
     private int typePlayer;
 

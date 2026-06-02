@@ -23,8 +23,9 @@
         protected Array<CarSpawner> spawners;
         @Getter
         protected Array<Item> items = new Array<>();
-        private Music backgroundMusic, batEntranceMusic;
-        private Sound collisionSound, crashSound, coinSound, diamondSound, lifeSound, bubbleSound, victorySound, biteSound;
+        private Music backgroundMusic, batEntranceMusic, discoMusic;
+        private Sound collisionSound, crashSound, coinSound, diamondSound, lifeSound, bubbleSound, victorySound,
+            biteSound, drownSound;
         @Getter
         private boolean partidaFinalizada = false;
         private float idleTimer = 0f;           // Cuenta el tiempo que lleva quieto
@@ -35,6 +36,7 @@
         public LogicManager() {
             backgroundMusic = ResourceManager.getMusic("background.mp3");
             batEntranceMusic = ResourceManager.getMusic("bat_wings.mp3");
+            discoMusic = ResourceManager.getMusic("disco_music.mp3");
             collisionSound = ResourceManager.getSound("bump.mp3");
             crashSound = ResourceManager.getSound("crash.mp3");
             coinSound = ResourceManager.getSound("getCoin.mp3");
@@ -43,6 +45,7 @@
             bubbleSound = ResourceManager.getSound("removeLife.mp3");
             victorySound = ResourceManager.getSound("victory.mp3");
             biteSound = ResourceManager.getSound("bite.mp3");
+            drownSound = ResourceManager.getSound("drown.mp3");
 
             this.enemies = new Array<>();
             this.spawners = new Array<>();
@@ -163,6 +166,7 @@
 
             if (isInWater) {
                 player.takeScore(50);
+                drownSound.play();
                 finalizarPartida("¿Ya? Te has ahogado. Te avisé de las clases de natación");
             }
 
@@ -269,6 +273,10 @@
 
                             //Ponemos el anciano en nuestra dirección para dar más pena
                             elderly.setState(IDLE_BACK);
+                        } else if (enemy instanceof AlienEnemy) {
+                            backgroundMusic.stop();
+                            discoMusic.play();
+                            gameScreen.showAlert("Es hora de disco");
                         }
                     }
                 }
@@ -288,26 +296,7 @@
             this.endMessage = message;
 
             // Paramos la música de fondo
-            if (backgroundMusic.isPlaying()) {
-                backgroundMusic.stop();
-            }
-        }
-
-        public void toggleBackgroundMusic(boolean enable) {
-            if (enable) {
-                if (!backgroundMusic.isPlaying() && ConfigurationManager.isMusicEnabled()) {
-                    backgroundMusic.setLooping(true);
-                    backgroundMusic.setVolume(0.3f);
-                    backgroundMusic.play();
-                }
-            } else {
-                if (backgroundMusic.isPlaying()) {
-                    backgroundMusic.pause(); // Lo pausamos
-                }
-                if (batEntranceMusic.isPlaying()) {
-                    batEntranceMusic.pause();
-                }
-            }
+            stopAllMusic();
         }
 
         // Silencia los efectos de sonido
@@ -320,6 +309,7 @@
             bubbleSound.stop();
             victorySound.stop();
             biteSound.stop();
+            drownSound.stop();
         }
 
         // Silencia la musica
@@ -329,6 +319,9 @@
             }
             if (batEntranceMusic.isPlaying()) {
                 batEntranceMusic.stop();
+            }
+            if (discoMusic.isPlaying()) {
+                discoMusic.stop();
             }
         }
 
