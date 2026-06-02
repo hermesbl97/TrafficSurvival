@@ -20,32 +20,44 @@ public class Player extends Character implements Disposable {
     private int lives = 2;
     private boolean immune = false;
     private float immunityTimer;
+    private int typePlayer;
 
-    public Player(TextureRegion texture) {
+    public Player(TextureRegion texture, int typePlayer) {
         super(texture, new Vector2(100, 0), IDLE_FRONT);
 
+        this.typePlayer = typePlayer;
         stateTime = 0f;
 
+        // Si se juega con el personaje 3 se empieza con una vida extra
+        if (typePlayer == 3) {
+            this.lives = 3;
+        } else {
+            this.lives = 2;
+        }
+
+        //Definimos el número de jugador para reutilizar las animaciones
+        String playerNumber = "player" + typePlayer;
+
         movingFrontAnimation = new Animation<>(0.15f,
-            ResourceManager.getRegion("player3_move_front"),
-            ResourceManager.getRegion("player3_move_front2")
+            ResourceManager.getRegion( playerNumber + "_move_front"),
+            ResourceManager.getRegion( playerNumber + "_move_front2")
         );
 
         movingRightAnimation = new Animation<>(0.15f,
-            ResourceManager.getRegion("player3_move_right"),
-            ResourceManager.getRegion("player3_idle_right"),
-            ResourceManager.getRegion("player3_move_right2")
+            ResourceManager.getRegion(playerNumber + "_move_right"),
+            ResourceManager.getRegion(playerNumber + "_idle_right"),
+            ResourceManager.getRegion( playerNumber + "_move_right2")
         );
 
         movingLeftAnimation = new Animation<>(0.15f,
-            ResourceManager.getRegion("player3_move_left"),
-            ResourceManager.getRegion("player3_idle_left"),
-            ResourceManager.getRegion("player3_move_left2")
+            ResourceManager.getRegion( playerNumber + "_move_left"),
+            ResourceManager.getRegion( playerNumber + "_idle_left"),
+            ResourceManager.getRegion(playerNumber + "_move_left2")
         );
 
         movingBackAnimation = new Animation<>(0.15f,
-            ResourceManager.getRegion("player3_move_back"),
-            ResourceManager.getRegion("player3_move_back2")
+            ResourceManager.getRegion(playerNumber + "_move_back"),
+            ResourceManager.getRegion( playerNumber + "_move_back2")
         );
 
         this.rectangle.setSize(16, 16);
@@ -59,21 +71,27 @@ public class Player extends Character implements Disposable {
         stateTime += delta;
         boolean isMoving = false;
 
+        // El jugador 1 se mueve un 40% más rápido que el resto
+        float speed = PLAYER_SPEED;
+        if (typePlayer == 1) {
+            speed = PLAYER_SPEED * 1.4f;
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             state = MOVE_LEFT;
-            position.x -= PLAYER_SPEED * delta;
+            position.x -= speed * delta;
             isMoving = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             state = MOVE_RIGHT;
-            position.x += PLAYER_SPEED * delta;
+            position.x += speed * delta;
             isMoving = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             state = MOVE_FRONT;
-            position.y += PLAYER_SPEED * delta;
+            position.y += speed * delta;
             isMoving = true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             state = MOVE_BACK;
-            position.y -= PLAYER_SPEED * delta;
+            position.y -= speed * delta;
             isMoving = true;
         }
 
@@ -89,18 +107,20 @@ public class Player extends Character implements Disposable {
     }
 
     public void update(float delta) {
+        String playerNumber = "player" + typePlayer;
+
         switch (state) {
             case IDLE_FRONT:
-                currentFrame = ResourceManager.getRegion("player3_idle_front");
+                currentFrame = ResourceManager.getRegion( playerNumber + "_idle_front");
                 break;
             case IDLE_BACK:
-                currentFrame = ResourceManager.getRegion("player3_idle_back");
+                currentFrame = ResourceManager.getRegion( playerNumber + "_idle_back");
                 break;
             case IDLE_LEFT:
-                currentFrame = ResourceManager.getRegion("player3_idle_left");
+                currentFrame = ResourceManager.getRegion(playerNumber + "_idle_left");
                 break;
             case IDLE_RIGHT:
-                currentFrame = ResourceManager.getRegion("player3_idle_right");
+                currentFrame = ResourceManager.getRegion(playerNumber + "_idle_right");
                 break;
             case MOVE_FRONT:
                 currentFrame = movingFrontAnimation.getKeyFrame(stateTime, true);

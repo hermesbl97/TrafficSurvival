@@ -72,15 +72,15 @@ public class ConfigurationScreen implements Screen {
             }
         });
 
-        VisList<String> selectLevel = new VisList<>();
-        selectLevel.getItems().add("Fácil");
-        selectLevel.getItems().add("Medio");
-        selectLevel.getItems().add("Difícil");
-        selectLevel.setSelectedIndex(preferences.getInteger("level", 2) -1);
-        selectLevel.addListener(new ClickListener() {
+        VisList<String> selectPlayer = new VisList<>();
+        selectPlayer.getItems().add("Hermes: ¿Quieres velocidad? Soy tu hombre");
+        selectPlayer.getItems().add("Marta: Dame dinero que yo lo gestiono (+10)");
+        selectPlayer.getItems().add("Santi: Más vidas que un gato (+1)");
+        selectPlayer.setSelectedIndex(preferences.getInteger("selected_player", 3) - 1);
+        selectPlayer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                preferences.putInteger("level", selectLevel.getSelectedIndex() + 1);
+                preferences.putInteger("selected_player", selectPlayer.getSelectedIndex() + 1);
                 preferences.flush();
             }
 
@@ -95,13 +95,13 @@ public class ConfigurationScreen implements Screen {
         });
 
         table.row(); //ordenamos la tabla
-        table.add(checkSound).center().width(200).height(50).pad(10);
+        table.add(checkSound).center().width(400).height(50).pad(10);
         table.row();
-        table.add(checkMusic).center().width(200).height(50).pad(10);
+        table.add(checkMusic).center().width(400).height(50).pad(10);
         table.row();
-        table.add(selectLevel).center().width(200).height(50).pad(10);
+        table.add(selectPlayer).center().width(400).height(100).pad(15);
         table.row();
-        table.add(goBackButton).center().width(200).height(50).pad(10);
+        table.add(goBackButton).center().width(400).height(50).pad(15);
 
         Gdx.input.setInputProcessor(stage);
     }
