@@ -24,7 +24,7 @@ public class LevelManager {
     TiledMapTileLayer waterLayer;
     MapLayer enemiesLayer;
     MapLayer itemsLayer;
-    protected Array<Item> items = new Array<>();
+    protected Array<Item> items;
 
     public LevelManager(LogicManager logicManager) {
         this.logicManager = logicManager;
@@ -44,6 +44,9 @@ public class LevelManager {
 
         loadEnemies();
         loadItems();
+
+        AlienEnemy dancingAlien = new AlienEnemy(new Vector2(20*16f, 117*16f));
+        logicManager.addEnemy(dancingAlien);
     }
 
     private void loadEnemies() {
