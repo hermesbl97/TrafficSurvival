@@ -2,7 +2,7 @@ package com.svalero.trafficsurvive.screen;
 
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -10,10 +10,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
+import com.kotcrab.vis.ui.widget.*;
 import com.svalero.trafficsurvive.manager.*;
 
 import static com.svalero.trafficsurvive.util.Constants.GAME_NAME;
@@ -30,7 +27,16 @@ public class GameScreen implements Screen {
     private boolean isPaused = false;
     private VisWindow pauseWindow;
 
+    // Información Jugador
+    private VisLabel scoreLabel;
+    private VisLabel livesLabel;
+    private VisLabel levelLabel;
+    private VisLabel alertLabel; // Espacio reservado para avisos personalizados
+    private float alertTimer = 0f; // Temporizador para ocultar el aviso
+
     public GameScreen() {
+        if (!VisUI.isLoaded()) VisUI.load();
+
         logicManager = new LogicManager();
         logicManager.load();
         levelManager = new LevelManager(logicManager);
@@ -38,6 +44,8 @@ public class GameScreen implements Screen {
         renderManager = new RenderManager(logicManager, levelManager.batch);
         cameraManager = new CameraManager(logicManager, levelManager);
         stage = new Stage(new ScreenViewport());
+
+        createHUD();
     }
 
     @Override
@@ -58,8 +66,20 @@ public class GameScreen implements Screen {
 
         // Si no ha terminado la partida y no estamos pausados, gestionamos la camara y renderizamos la lógica
         if (!logicManager.isPartidaFinalizada() && !isPaused) {
-            logicManager.update(v, levelManager);
+            logicManager.update(v, levelManager, this);
             cameraManager.handleCamera();
+
+            // Actualizamos los textos del HUD con los datos
+            scoreLabel.setText("Puntos: " + logicManager.getPlayer().getScore());
+            livesLabel.setText("Vidas: " + logicManager.getPlayer().getLives());
+
+            // Controlamos el tiempo del mensaje de alerta
+            if (alertTimer > 0) {
+                alertTimer -= v;
+                if (alertTimer <= 0) {
+                    alertLabel.setText(""); // Borramos el texto cuando expire el tiempo
+                }
+            }
         }
 
         // Pintamos el fondo, mapa, jugador y enemigos
@@ -235,6 +255,36 @@ public class GameScreen implements Screen {
         });
     }
 
+    //Tabla informativa del jugador
+    private void createHUD() {
+        VisTable hudTable = new VisTable();
+        hudTable.top().left().setFillParent(true); // Se coloca arriba a la izquierda ocupando la pantalla
+
+        scoreLabel = new VisLabel("Puntos: 0");
+        livesLabel = new VisLabel("Vidas: 0");
+        levelLabel = new VisLabel("Nivel: " + levelManager.getCurrentLevel());
+
+        // Añadimos a la tabla los elementos
+        hudTable.add(scoreLabel).pad(10);
+        hudTable.add(livesLabel).pad(10);
+        hudTable.add(levelLabel).pad(10);
+        stage.addActor(hudTable);
+
+        // Tabla de alertas
+        VisTable alertTable = new VisTable();
+        alertTable.bottom().setFillParent(true);
+
+        alertLabel = new VisLabel("");
+        alertTable.add(alertLabel);
+        stage.addActor(alertTable);
+    }
+
+    // LogicManager manda alertas personalizadas a la pantalla
+    public void showAlert(String message) {
+        alertLabel.setText(message);
+        alertTimer = 2.0f; // El mensaje durará 2 segundos
+    }
+
     @Override
     public void resize(int width, int height) {
         if (width <= 0 || height <= 0) return;
@@ -260,5 +310,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         logicManager.dispose();
         renderManager.dispose();
+        stage.dispose();
     }
 }
