@@ -50,6 +50,15 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        VisTextButton instructionsButton = new VisTextButton("Instrucciones");
+        instructionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new InstructionsScreen());
+                dispose();
+            }
+        });
+
         VisTextButton configurationButton = new VisTextButton("Configuración");
         configurationButton.addListener(new ClickListener() {
             @Override
@@ -68,10 +77,11 @@ public class MainMenuScreen implements Screen {
         });
 
         menuLeftTable.add(playButton).center().width(200).height(50).pad(10).row();
+        menuLeftTable.add(instructionsButton).center().width(200).height(50).pad(10).row();
         menuLeftTable.add(configurationButton).center().width(200).height(50).pad(10).row();
         menuLeftTable.add(exitButton).center().width(200).height(50).pad(10).row();
 
-    // --- SUBTABLA DERECHA: LA TABLA DE PUNTUACIONES ---
+    //  Tabla de puntuaciones
         VisTable scoreRightTable = new VisTable(true);
 
         VisLabel rankingTitle = new VisLabel("Top 10 Records");
