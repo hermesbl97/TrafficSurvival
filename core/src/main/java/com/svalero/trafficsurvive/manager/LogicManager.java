@@ -3,8 +3,10 @@ package com.svalero.trafficsurvive.manager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -12,6 +14,8 @@ import com.svalero.trafficsurvive.domain.*;
 import com.svalero.trafficsurvive.domain.Character;
 import com.svalero.trafficsurvive.screen.ConfigurationScreen;
 import lombok.Getter;
+
+import static com.svalero.trafficsurvive.util.Constants.GAME_NAME;
 
 public class LogicManager implements Disposable {
 
@@ -42,7 +46,15 @@ public class LogicManager implements Disposable {
     }
 
     public void load() {
-        player = new Player(ResourceManager.getRegion("player3_idle_right"));
+        // Leemos qué personaje guardó el usuario en la pantalla de configuración (por defecto 3)
+        Preferences prefs = Gdx.app.getPreferences(GAME_NAME);
+        int selectedPlayer = prefs.getInteger("selected_player", 3);
+
+        // Cargamos la textura inicial estática según el personaje escogido
+        TextureRegion initialTexture = ResourceManager.getRegion("player" + selectedPlayer + "_idle_right");
+
+        // Creamos al jugador pasándole la textura y su tipo
+        player = new Player(initialTexture, selectedPlayer);
 
         if (ConfigurationManager.isMusicEnabled()) {
             backgroundMusic.setLooping(true);
@@ -110,10 +122,16 @@ public class LogicManager implements Disposable {
             Item item = items.get(i);
 
             if (player.getRectangle().overlaps(item.getRectangle())) {
+                // Si el jugador es el 2 Suma 10 puntos extra por moneda
                 if (item instanceof CoinItem) {
-                    player.addScore(30);
+                    if (player.getTypePlayer() == 2) {
+                        player.addScore(45);
+                        System.out.println("Suma 45 Puntos por la moneda");
+                    } else {
+                        player.addScore(35);
+                        System.out.println("Suma 35 Puntos por la moneda");
+                    }
                     coinSound.play();
-                    System.out.println("Moneda cogida. Suma 30 Puntos ");
                 } else if (item instanceof DiamondItem) {
                     player.activateImmunity(12f);
                     player.addScore(15);
@@ -135,7 +153,7 @@ public class LogicManager implements Disposable {
         }
 
         // Actualizar y comprobar colisiones con enemigos
-        for (int i = enemies.size - 1; i >= 0; i--) {
+        for(int i = enemies.size - 1; i >= 0; i--) {
             Character enemy = enemies.get(i);
             enemy.update(v);
 
@@ -156,11 +174,12 @@ public class LogicManager implements Disposable {
 
                         if (player.getLives() <= 0) {
                             System.out.println(" Te has quedado sin vidas.");
+                            player.takeScore(50);
                             finalizarPartida();
                         }
                     } else if (enemy instanceof BubbleEnemy) {
                         bubbleSound.play();
-                        player.takeScore(25);
+                        player.takeScore(20);
                         System.out.println("Te ha tocado una burbuja rosa");
                         //TODO al chocar te mueves al revés
                     }
