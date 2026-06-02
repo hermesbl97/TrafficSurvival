@@ -118,6 +118,19 @@ public class LogicManager implements Disposable {
             }
         }
 
+        //Colisión con agua
+        boolean isInWater =
+            levelManager.isCellWater(playerLeft, playerBottom) ||
+                levelManager.isCellWater(playerRight, playerBottom) ||
+                levelManager.isCellWater(playerLeft, playerTop) ||
+                levelManager.isCellWater(playerRight, playerTop);
+
+        if (isInWater) {
+            player.takeScore(50);
+            finalizarPartida();
+            System.out.println("Te has ahogado");
+        }
+
         for (int i = items.size - 1; i >= 0; i--) {
             Item item = items.get(i);
 

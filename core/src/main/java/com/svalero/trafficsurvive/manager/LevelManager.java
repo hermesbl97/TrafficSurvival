@@ -19,6 +19,7 @@ public class LevelManager {
     private int currentLevel;
     TiledMap map;
     TiledMapTileLayer collisionLayer;
+    TiledMapTileLayer waterLayer;
     MapLayer enemiesLayer;
     MapLayer itemsLayer;
     protected Array<Item> items = new Array<>();
@@ -32,6 +33,7 @@ public class LevelManager {
     public void loadCurrentLevel() {
         map = new TmxMapLoader().load("maps/level" + currentLevel+".tmx");
         collisionLayer = (TiledMapTileLayer) map.getLayers().get("terrain");
+        waterLayer = (TiledMapTileLayer) map.getLayers().get("water");
         enemiesLayer = map.getLayers().get("enemies");
         itemsLayer = map.getLayers().get("items");
 
@@ -88,7 +90,20 @@ public class LevelManager {
         return cell != null;
     }
 
+    // Comprobamos si colisiona con el agua
+    public boolean isCellWater(float x, float y) {
+        if (waterLayer == null) return false;
 
+        // Convertimos los píxeles del juego a coordenadas de la rejilla de Tiled
+        int cellX = (int) (x / waterLayer.getTileWidth());
+        int cellY = (int) (y / waterLayer.getTileHeight());
+
+        // Conseguimos la celda de esa posición
+        TiledMapTileLayer.Cell cell = waterLayer.getCell(cellX, cellY);
+
+        // Si la celda no es nula, tiene un tile de agua, hay colisión
+        return cell != null;
+    }
 
     private void loadItems() {
         for (MapObject mapObject : itemsLayer.getObjects()) {
