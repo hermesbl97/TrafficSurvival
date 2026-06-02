@@ -35,7 +35,7 @@ public class ScoreManager {
         allScores.sort(new Comparator<ScoreInput>() {
             @Override
             public int compare(ScoreInput s1, ScoreInput s2) {
-                return Integer.compare(s1.score, s2.score);
+                return Integer.compare(s2.score, s1.score);
             }
         });
 
