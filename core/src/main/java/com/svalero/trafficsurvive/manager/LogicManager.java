@@ -193,8 +193,9 @@ public class LogicManager implements Disposable {
                     } else if (enemy instanceof BubbleEnemy) {
                         bubbleSound.play();
                         player.takeScore(20);
+                        player.invertControls(15f);
                         System.out.println("Te ha tocado una burbuja rosa");
-                        //TODO al chocar te mueves al revés
+                        enemies.removeIndex(i);
                     }
                 }
             }

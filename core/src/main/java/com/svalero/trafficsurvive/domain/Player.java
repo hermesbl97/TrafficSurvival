@@ -18,9 +18,14 @@ public class Player extends Character implements Disposable {
 
     private int score = 0;
     private int lives = 2;
+    private int typePlayer;
+
     private boolean immune = false;
     private float immunityTimer;
-    private int typePlayer;
+
+    private boolean controlsInverted = false;
+    private float inversionTimer = 0f;
+
 
     public Player(TextureRegion texture, int typePlayer) {
         super(texture, new Vector2(100, 0), IDLE_FRONT);
@@ -77,19 +82,37 @@ public class Player extends Character implements Disposable {
             speed = PLAYER_SPEED * 1.4f;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        // Recogemos el movimiento normal al presionar las flechas
+        boolean pressLeft = Gdx.input.isKeyPressed(Input.Keys.LEFT);
+        boolean pressRight = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        boolean pressUp = Gdx.input.isKeyPressed(Input.Keys.UP);
+        boolean pressDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+
+        // Si los controles están invertidos, cambiamos el valor de las variables
+        if (controlsInverted) {
+            boolean transLeft = pressLeft;
+            boolean transUp = pressUp;
+
+            pressLeft = pressRight;  // Izquierda ahora es Derecha
+            pressRight = transLeft;   // Derecha ahora es Izquierda
+            pressUp = pressDown;     // Arriba ahora es Abajo
+            pressDown = transUp;      // Abajo ahora es Arriba
+        }
+
+        // Aplicamos el movimiento en función de la tecla pulsada
+        if (pressLeft) {
             state = MOVE_LEFT;
             position.x -= speed * delta;
             isMoving = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (pressRight) {
             state = MOVE_RIGHT;
             position.x += speed * delta;
             isMoving = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        } else if (pressUp) {
             state = MOVE_FRONT;
             position.y += speed * delta;
             isMoving = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (pressDown) {
             state = MOVE_BACK;
             position.y -= speed * delta;
             isMoving = true;
@@ -143,6 +166,14 @@ public class Player extends Character implements Disposable {
                 System.out.println("La inmunidad se ha terminado");
             }
         }
+
+        if (controlsInverted) {
+            inversionTimer -= delta;
+            if (inversionTimer <= 0) {
+                controlsInverted = false;
+                System.out.println("¡Los controles han vuelto a la normalidad!");
+            }
+        }
     }
 
     public void addScore(int points) { this.score += points; }
@@ -155,6 +186,12 @@ public class Player extends Character implements Disposable {
         this.immune = true;
         this.immunityTimer = duration;
     }
+
+    public void invertControls(float duration) {
+        this.controlsInverted = true;
+        this.inversionTimer = duration;
+    }
+
 
     public void removeLife() {
         lives --;
