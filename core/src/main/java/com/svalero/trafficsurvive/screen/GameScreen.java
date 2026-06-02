@@ -209,8 +209,11 @@ public class GameScreen implements Screen {
         // Damos el control del teclado y ratón al diálogo para poder escribir
         Gdx.input.setInputProcessor(stage);
 
+
+        String message = logicManager.getEndMessage();
+
         // Mostramos el input integrado de VisUI que se renderiza dentro del propio juego
-        Dialogs.showInputDialog(stage, "¡Partida Terminada!", "Introduce tu nombre:",
+        Dialogs.showInputDialog(stage, message, "Introduce tu nombre:",
             true, new InputDialogListener() {
 
             @Override
