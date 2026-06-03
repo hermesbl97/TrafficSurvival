@@ -57,6 +57,17 @@ public class GameScreen implements Screen {
 //        com.badlogic.gdx.Gdx.gl.glClearColor(0, 0, 0, 1);
 //        com.badlogic.gdx.Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (logicManager.isLevelEnded()) {
+            levelManager.changeToNextLevel(); // Cambia el nivel
+
+            // Le pasamos el nuevo batch recién creado al renderManager
+            renderManager.setBatch(levelManager.batch);
+
+            // Actualizamos la interfaz gráfica con el número de nivel correcto
+            levelLabel.setText("Nivel: " + levelManager.getCurrentLevel());
+            return;
+        }
+
         // Si se presiona escape se pausa la partida
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (!logicManager.isPartidaFinalizada()) {

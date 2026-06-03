@@ -12,12 +12,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.svalero.trafficsurvive.domain.*;
 import lombok.Getter;
+import lombok.Setter;
 
 public class LevelManager {
     private LogicManager logicManager;
     OrthogonalTiledMapRenderer mapRenderer;
     public Batch batch;
-    @Getter
+    @Getter @Setter
     private int currentLevel;
     TiledMap map;
     TiledMapTileLayer collisionLayer;
@@ -29,10 +30,14 @@ public class LevelManager {
     public LevelManager(LogicManager logicManager) {
         this.logicManager = logicManager;
         this.items = new Array<>();
-        currentLevel = 2;
+        currentLevel = 1;
     }
 
     public void loadCurrentLevel() {
+        // Liberamos recursos de mapa y renderizadores anteriores si existían
+        if (map != null) map.dispose();
+        if (mapRenderer != null) mapRenderer.dispose();
+
         map = new TmxMapLoader().load("maps/level" + currentLevel+".tmx");
         collisionLayer = (TiledMapTileLayer) map.getLayers().get("terrain");
         waterLayer = (TiledMapTileLayer) map.getLayers().get("water");
@@ -141,5 +146,24 @@ public class LevelManager {
                 }
             }
         }
+    }
+
+    public void changeToNextLevel() {
+        // Avanzamos de nivel
+        this.currentLevel = 2;
+
+        // Limpiamos por completo las listas lógicas antiguas antes de cargar nada nuevo
+        logicManager.enemies.clear();
+        logicManager.spawners.clear();
+        logicManager.items.clear();
+
+        logicManager.setLevelEnded(false);
+
+        // Colocamos al jugador en la posición inicial
+        logicManager.getPlayer().getPosition().set(100, 0);
+        logicManager.getPlayer().getRectangle().setPosition(100, 0);
+
+        // Cargamos las capas y texturas
+        loadCurrentLevel();
     }
 }
