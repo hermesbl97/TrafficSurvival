@@ -11,6 +11,7 @@
     import com.svalero.trafficsurvive.domain.Character;
     import com.svalero.trafficsurvive.screen.GameScreen;
     import lombok.Getter;
+    import lombok.Setter;
 
     import static com.svalero.trafficsurvive.domain.Character.State.IDLE_BACK;
     import static com.svalero.trafficsurvive.util.Constants.GAME_NAME;
@@ -28,6 +29,8 @@
             biteSound, drownSound;
         @Getter
         private boolean partidaFinalizada = false;
+        @Getter @Setter
+        private boolean levelEnded = false;
         private float idleTimer = 0f;           // Cuenta el tiempo que lleva quieto
         private boolean batSpawned = false;     // Evita que salgan varios murciélagos a la vez
         @Getter
@@ -194,7 +197,15 @@
                     } else if (item instanceof ExitItem) {
                         victorySound.play();
                         player.addScore(50);
-                        finalizarPartida("¡Enhorabuena! Lo has logrado");
+
+                        if (levelManager.getCurrentLevel() == 1) {
+                            levelEnded = true;
+                            gameScreen.showAlert("¡Nivel 1 completado! Bienvenido al Nivel 2");
+
+                        } else {
+                            // Al completar los dos niveles finaliza la partida
+                            finalizarPartida("¡Enhorabuena! Lo has logrado, ¡vaya partida!.");
+                        }
                     }
 
                     // Lo quitamos de la pantalla

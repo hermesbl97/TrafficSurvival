@@ -46,6 +46,6 @@ public class CameraManager {
 
         // Renderizamos el mapa con la vista actualizada
         levelManager.mapRenderer.setView(camera);
-        levelManager.mapRenderer.render(new int[]{0, 1, 2, 5});
+        levelManager.mapRenderer.render();
     }
 }

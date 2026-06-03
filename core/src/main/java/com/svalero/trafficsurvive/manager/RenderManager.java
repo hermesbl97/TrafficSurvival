@@ -19,6 +19,10 @@ public class RenderManager implements Disposable {
         this.batch = batch;
     }
 
+    public void setBatch(Batch newBatch) {
+        this.batch = newBatch;
+    }
+
     public void drawFrame(float v) {
         batch.begin();
 
