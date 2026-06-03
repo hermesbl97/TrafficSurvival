@@ -1,33 +1,10 @@
-# TrafficSurvive
+Traffic Survival es un juego para mayores de 12 años.
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
-
-This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
-
-## Platforms
-
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
-
-## Gradle
-
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+# Instrucciones
+- Usa las flechas del teclado para moverte y alcanza la salida.
+- Ten cuidado, si te atropella un coche perderás una vida. Evita las burbujas rosas o perderás el control.
+- ¡Cuidado! Recuerda que no sabes nadar, si te caes al agua morirás.
+- No te quedes quieto o te perseguirán... Si te alcanzan pierdes TODOS tus puntos. ¡Ojo! No choques con nadie. Estás avisado
+- Recoge monedas sumarás muchos puntos. Los diamantes te darán inmunidad un tiempo breve. Si encuentras una vida no la dejes pasar sólo empiezas con una. Salvo que juegues con Santi.
+- Si necesitas un respiro pulsa escape.
+- Te gusta el frenesí, escoge a Hermes. Si te gusta tener una bala más en la recámara, quédate con Santi. Y sino escoge a Marta y verás como tus puntuaciones suben fácilmente.
